@@ -20,7 +20,7 @@ public class PersonService {
         this.personDao = personDao;
     }
 
-    public int addPerson(Person person) {
+    public boolean addPerson(Person person) {
         return personDao.insertPerson(person);
     }
 
@@ -30,7 +30,11 @@ public class PersonService {
 
     public Optional<Person> getPersonById(UUID id) { return this.personDao.selectPersonById(id); }
 
-    public int deletePerson(UUID id) { return this.personDao.deletePersonById(id); }
+    public boolean deletePerson(UUID id) {
+        return this.personDao.deletePersonById(id);
+    }
 
-    public int updatePerson(UUID id, Person person) { return this.personDao.updatePersonById(id, person); }
+    public boolean updatePerson(UUID id, Person person) {
+        return this.personDao.updatePersonById(id, person);
+    }
 }

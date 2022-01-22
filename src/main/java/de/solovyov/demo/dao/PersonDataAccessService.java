@@ -20,13 +20,15 @@ public class PersonDataAccessService implements PersonDao {
     }
 
     @Override
-    public int insertPerson(UUID id, Person person) {
-        return 0;
+    public boolean insertPerson(UUID id, Person person) {
+        final String sql = "INSERT INTO " + PersonDao.TABLE_NAME + " (id, name) VALUES (uuid_generate_v4(), ?)";
+
+        return this.jdbcTemplate.update(sql, new Object[]{person.getName()}) == 1;
     }
 
     @Override
     public List<Person> selectAllPeople() {
-        final String sql = "SELECT id, name FROM person";
+        final String sql = "SELECT id, name FROM " + PersonDao.TABLE_NAME;
         return this.jdbcTemplate.query(sql, (rs, rowNum) -> {
             UUID id = UUID.fromString(rs.getString("id"));
             String name = rs.getString("name");
@@ -36,7 +38,7 @@ public class PersonDataAccessService implements PersonDao {
 
     @Override
     public Optional<Person> selectPersonById(UUID id) {
-        final String sql = "SELECT id, name FROM person WHERE id = ?";
+        final String sql = "SELECT id, name FROM " + PersonDao.TABLE_NAME + " WHERE id = ?";
         Person person = this.jdbcTemplate.queryForObject(sql, new Object[]{id}, (rs, rowNum) -> {
             UUID personId = UUID.fromString(rs.getString("id"));
             String name = rs.getString("name");
@@ -47,12 +49,14 @@ public class PersonDataAccessService implements PersonDao {
     }
 
     @Override
-    public int deletePersonById(UUID id) {
-        return 0;
+    public boolean deletePersonById(UUID id) {
+        final String sql = "DELETE FROM " + PersonDao.TABLE_NAME + " WHERE id = ?";
+        return this.jdbcTemplate.update(sql, new Object[]{id}) == 1;
     }
 
     @Override
-    public int updatePersonById(UUID id, Person person) {
-        return 0;
+    public boolean updatePersonById(UUID id, Person person) {
+        final String sql = "UPDATE " + PersonDao.TABLE_NAME + " SET name = ? WHERE id = ?";
+        return this.jdbcTemplate.update(sql, new Object[]{person.getName(), id}) == 1;
     }
 }

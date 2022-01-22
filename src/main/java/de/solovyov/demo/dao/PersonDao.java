@@ -8,9 +8,11 @@ import java.util.UUID;
 
 public interface PersonDao {
 
-    int insertPerson(UUID id, Person person);
+    static final String TABLE_NAME = "person";
 
-    default int insertPerson(Person person) {
+    boolean insertPerson(UUID id, Person person);
+
+    default boolean insertPerson(Person person) {
         UUID id = UUID.randomUUID();
         return insertPerson(id, person);
     }
@@ -19,8 +21,8 @@ public interface PersonDao {
 
     Optional<Person> selectPersonById(UUID id);
 
-    int deletePersonById(UUID id);
+    boolean deletePersonById(UUID id);
 
-    int updatePersonById(UUID id, Person person);
+    boolean updatePersonById(UUID id, Person person);
 
 }
